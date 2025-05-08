@@ -1,0 +1,24 @@
+name: Render video
+on:
+  workflow_dispatch:
+    inputs:
+      src:
+        description: 'Source of video file'
+        required: true
+        default: '/public/sample-video.mp4'
+jobs:
+  render:
+    name: Render video
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@main
+      - run: npm i
+      - run: echo $WORKFLOW_INPUT > input-props.json
+        env:
+          WORKFLOW_INPUT: ${{ toJson(github.event.inputs) }}
+      - run: npx remotion render CaptionedVideo out/sample-video.mp4 --props="./input-props.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sample-video.mp4
+          path: out/sample-video.mp4
