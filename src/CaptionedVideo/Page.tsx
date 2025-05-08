@@ -16,12 +16,12 @@ const container: React.CSSProperties = {
   justifyContent: "center",
   alignItems: "center",
   top: undefined,
-  bottom: 350,
+  bottom: 230,
   height: 150,
 };
 
 const DESIRED_FONT_SIZE = 120;
-const HIGHLIGHT_COLOR = "#39E508";
+const HIGHLIGHT_COLOR = "#A057FF";
 
 export const Page: React.FC<{
   readonly enterProgress: number;
