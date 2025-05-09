@@ -25,6 +25,15 @@ export type SubtitleProp = {
 
 export const captionedVideoSchema = z.object({
   src: z.string(),
+  subtitles: z.array(
+    z.object({
+      text: z.string(),
+      startMs: z.number(),
+      endMs: z.number(),
+      timestampMs: z.number(),
+      confidence: z.number().nullable(),
+    }),
+  ),
 });
 
 export const calculateCaptionedVideoMetadata: CalculateMetadataFunction<
@@ -53,9 +62,10 @@ const getFileExists = (file: string) => {
 // - 200 to only display 1 word at a time
 const SWITCH_CAPTIONS_EVERY_MS = 1200;
 
-export const CaptionedVideo: React.FC<{
-  src: string;
-}> = ({ src }) => {
+export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
+  src,
+  subtitles: subtitlesViaProp,
+}) => {
   const [subtitles, setSubtitles] = useState<Caption[]>([]);
   const [handle] = useState(() => delayRender());
   const { fps } = useVideoConfig();
@@ -69,14 +79,20 @@ export const CaptionedVideo: React.FC<{
   const fetchSubtitles = useCallback(async () => {
     try {
       await loadFont();
-      const res = await fetch(subtitlesFile);
-      const data = (await res.json()) as Caption[];
-      setSubtitles(data);
-      continueRender(handle);
+
+      if (subtitlesViaProp.length > 0) {
+        setSubtitles(subtitlesViaProp);
+        continueRender(handle);
+      } else {
+        const res = await fetch(subtitlesFile);
+        const data = (await res.json()) as Caption[];
+        setSubtitles(data);
+        continueRender(handle);
+      }
     } catch (e) {
       cancelRender(e);
     }
-  }, [handle, subtitlesFile]);
+  }, [handle, subtitlesFile, subtitlesViaProp]);
 
   useEffect(() => {
     fetchSubtitles();
@@ -107,6 +123,7 @@ export const CaptionedVideo: React.FC<{
           src={src}
         />
       </AbsoluteFill>
+
       {pages.map((page, index) => {
         const nextPage = pages[index + 1] ?? null;
         const subtitleStartFrame = (page.startMs / 1000) * fps;
@@ -129,7 +146,10 @@ export const CaptionedVideo: React.FC<{
           </Sequence>
         );
       })}
-      {getFileExists(subtitlesFile) ? null : <NoCaptionFile />}
+
+      {getFileExists(subtitlesFile) || subtitlesViaProp.length > 0 ? null : (
+        <NoCaptionFile />
+      )}
     </AbsoluteFill>
   );
 };
