@@ -34,11 +34,11 @@ jobs:
       - name: Render video
         run: npx remotion render CaptionedVideo out/rendered-video.mp4 --props="./input-props.json"
 
-      - name: Upload video to Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: rendered-video.mp4
-          path: out/rendered-video.mp4
+      # - name: Upload video to Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: rendered-video.mp4
+      #     path: out/rendered-video.mp4
 
       - name: Upload to Cloudinary
         run: node upload-video.mjs
