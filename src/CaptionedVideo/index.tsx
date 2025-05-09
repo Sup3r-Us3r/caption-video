@@ -25,15 +25,17 @@ export type SubtitleProp = {
 
 export const captionedVideoSchema = z.object({
   src: z.string(),
-  subtitles: z.array(
-    z.object({
-      text: z.string(),
-      startMs: z.number(),
-      endMs: z.number(),
-      timestampMs: z.number(),
-      confidence: z.number().nullable(),
-    }),
-  ),
+  subtitles: z
+    .array(
+      z.object({
+        text: z.string(),
+        startMs: z.number(),
+        endMs: z.number(),
+        timestampMs: z.number(),
+        confidence: z.number().nullable(),
+      }),
+    )
+    .nullable(),
 });
 
 export const calculateCaptionedVideoMetadata: CalculateMetadataFunction<
@@ -80,7 +82,7 @@ export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
     try {
       await loadFont();
 
-      if (subtitlesViaProp.length > 0) {
+      if (subtitlesViaProp && subtitlesViaProp.length > 0) {
         setSubtitles(subtitlesViaProp);
         continueRender(handle);
       } else {
@@ -147,7 +149,8 @@ export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
         );
       })}
 
-      {getFileExists(subtitlesFile) || subtitlesViaProp.length > 0 ? null : (
+      {getFileExists(subtitlesFile) ||
+      (subtitlesViaProp && subtitlesViaProp.length > 0) ? null : (
         <NoCaptionFile />
       )}
     </AbsoluteFill>
