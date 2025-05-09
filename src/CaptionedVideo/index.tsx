@@ -25,17 +25,7 @@ export type SubtitleProp = {
 
 export const captionedVideoSchema = z.object({
   src: z.string(),
-  subtitles: z
-    .array(
-      z.object({
-        text: z.string(),
-        startMs: z.number(),
-        endMs: z.number(),
-        timestampMs: z.number(),
-        confidence: z.number().nullable(),
-      }),
-    )
-    .nullable(),
+  subtitlesUrl: z.string().url().optional(),
 });
 
 export const calculateCaptionedVideoMetadata: CalculateMetadataFunction<
@@ -66,35 +56,34 @@ const SWITCH_CAPTIONS_EVERY_MS = 1200;
 
 export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
   src,
-  subtitles: subtitlesViaProp,
+  subtitlesUrl,
 }) => {
   const [subtitles, setSubtitles] = useState<Caption[]>([]);
   const [handle] = useState(() => delayRender());
   const { fps } = useVideoConfig();
 
-  const subtitlesFile = src
-    .replace(/.mp4$/, ".json")
-    .replace(/.mkv$/, ".json")
-    .replace(/.mov$/, ".json")
-    .replace(/.webm$/, ".json");
+  const subtitlesFile =
+    subtitlesUrl ??
+    src
+      .replace(/.mp4$/, ".json")
+      .replace(/.mkv$/, ".json")
+      .replace(/.mov$/, ".json")
+      .replace(/.webm$/, ".json");
+
+  console.log("subtitlesFile: ", subtitlesFile);
 
   const fetchSubtitles = useCallback(async () => {
     try {
       await loadFont();
 
-      if (subtitlesViaProp && subtitlesViaProp.length > 0) {
-        setSubtitles(subtitlesViaProp);
-        continueRender(handle);
-      } else {
-        const res = await fetch(subtitlesFile);
-        const data = (await res.json()) as Caption[];
-        setSubtitles(data);
-        continueRender(handle);
-      }
+      const res = await fetch(subtitlesFile);
+      const data = (await res.json()) as Caption[];
+      setSubtitles(data);
+      continueRender(handle);
     } catch (e) {
       cancelRender(e);
     }
-  }, [handle, subtitlesFile, subtitlesViaProp]);
+  }, [handle, subtitlesFile]);
 
   useEffect(() => {
     fetchSubtitles();
@@ -150,7 +139,7 @@ export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
       })}
 
       {getFileExists(subtitlesFile) ||
-      (subtitlesViaProp && subtitlesViaProp.length > 0) ? null : (
+      subtitlesFile?.includes("https") ? null : (
         <NoCaptionFile />
       )}
     </AbsoluteFill>
