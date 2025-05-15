@@ -16,6 +16,10 @@ jobs:
   render:
     name: Render video
     runs-on: ubuntu-latest
+
+    env:
+      WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@main
