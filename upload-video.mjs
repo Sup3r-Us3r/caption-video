@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import { randomUUID } from "node:crypto";
 
 cloudinary.config({
   cloud_name: process?.env?.CLOUDINARY_CLOUD_NAME,
@@ -12,8 +13,8 @@ async function main() {
   const uploadResult = await cloudinary.uploader.upload(
     "out/rendered-video.mp4",
     {
-      folder: "bot/templates/instagram",
-      public_id: "rendered-video",
+      folder: "bot/instagram/videos",
+      public_id: randomUUID(),
       resource_type: "video",
       format: "mp4",
     },
@@ -22,15 +23,18 @@ async function main() {
   console.log("\nVIDEO SENT SUCCESSFULLY");
   console.log("\nCALL WEBHOOK TO TRIGGER WORKFLOW");
 
-  const webhookRequest = await fetch(process.env.WEBHOOK_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const webhookRequest = await fetch(
+    `${process.env.WEBHOOK_URL}?publishVideo=true`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        videoWithSubtitles: uploadResult?.secure_url,
+      }),
     },
-    body: JSON.stringify({
-      videoWithSubtitles: uploadResult?.secure_url,
-    }),
-  });
+  );
   const webhookResponse = await webhookRequest.json();
 
   if (!webhookRequest.ok) {
