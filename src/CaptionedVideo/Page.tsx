@@ -5,12 +5,12 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { TheBoldFont } from "../load-font";
+import { BebasNeueFont } from "../load-font";
 import { fitText } from "@remotion/layout-utils";
 import { makeTransform, scale, translateY } from "@remotion/animation-utils";
 import { TikTokPage } from "@remotion/captions";
 
-const fontFamily = TheBoldFont;
+const fontFamily = BebasNeueFont;
 
 const container: React.CSSProperties = {
   justifyContent: "center",
