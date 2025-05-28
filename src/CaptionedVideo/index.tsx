@@ -10,6 +10,8 @@ import {
   Sequence,
   useVideoConfig,
   watchStaticFile,
+  Audio,
+  staticFile,
 } from "remotion";
 import { z } from "zod";
 import SubtitlePage from "./SubtitlePage";
@@ -70,8 +72,6 @@ export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
       .replace(/.mov$/, ".json")
       .replace(/.webm$/, ".json");
 
-  console.log("subtitlesFile: ", subtitlesFile);
-
   const fetchSubtitles = useCallback(async () => {
     try {
       await loadFont();
@@ -106,6 +106,12 @@ export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: "white" }}>
+      <Audio
+        volume={0.1}
+        startFrom={60}
+        src={staticFile("background-music.m4a")}
+      />
+
       <AbsoluteFill>
         <OffthreadVideo
           style={{
