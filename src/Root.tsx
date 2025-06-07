@@ -16,7 +16,7 @@ export const RemotionRoot: React.FC = () => {
       calculateMetadata={calculateCaptionedVideoMetadata}
       schema={captionedVideoSchema}
       width={1080}
-      height={1350}
+      height={1920}
       defaultProps={{
         src: staticFile("sample-video.mp4"),
         subtitlesUrl: undefined,
