@@ -72,6 +72,14 @@ jobs:
       - name: Call Webhook
         run: |
           VIDEO_URL="https://app-automations.xyz/bot/instagram/videos/${{ env.NEW_FILENAME }}"
-          curl -X POST "${WEBHOOK_URL}?publishVideo=true" \
+          RESPONSE=$(curl -s -o response.txt -w "%{http_code}" -X POST "${WEBHOOK_URL}?publishVideo=true" \
             -H "Content-Type: application/json" \
-            -d "{\"videoWithSubtitles\": \"$VIDEO_URL\"}"
+            -d "{\"videoWithSubtitles\": \"$VIDEO_URL\"}")
+
+          echo "Webhook HTTP status: $RESPONSE"
+          cat response.txt
+
+          if [ "$RESPONSE" -ge 400 ]; then
+            echo "❌ Webhook call failed with status code $RESPONSE"
+            exit 1
+          fi
