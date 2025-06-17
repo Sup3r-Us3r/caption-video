@@ -44,9 +44,19 @@ jobs:
       #     name: rendered-video.mp4
       #     path: out/rendered-video.mp4
 
-      - name: Upload to Cloudinary
-        run: node upload-video.mjs
-        env:
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+      # - name: Upload to Cloudinary
+      #   run: node upload-video.mjs
+      #   env:
+      #     CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+      #     CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+      #     CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+
+      - name: Upload to R2
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: out/rendered-video.mp4
+          destination-dir: bot/instagram/videos
