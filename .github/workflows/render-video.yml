@@ -51,6 +51,14 @@ jobs:
       #     CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
       #     CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
 
+      - name: Generate UUID and rename file
+        id: rename
+        run: |
+          uuid=$(uuidgen)
+          new_filename="${uuid}.mp4"
+          mv out/rendered-video.mp4 out/$new_filename
+          echo "NEW_FILENAME=$new_filename" >> $GITHUB_ENV
+
       - name: Upload to R2
         uses: ryand56/r2-upload-action@latest
         with:
@@ -58,5 +66,12 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: out/rendered-video.mp4
+          source-dir: out/${{ env.NEW_FILENAME }}
           destination-dir: bot/instagram/videos
+
+      - name: Call Webhook
+        run: |
+          VIDEO_URL="https://app-automations.xyz/bot/instagram/videos/${{ env.NEW_FILENAME }}"
+          curl -X POST "${WEBHOOK_URL}?publishVideo=true" \
+            -H "Content-Type: application/json" \
+            -d "{\"videoWithSubtitles\": \"$VIDEO_URL\"}"
