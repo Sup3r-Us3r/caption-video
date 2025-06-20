@@ -16,11 +16,11 @@ const container: React.CSSProperties = {
   justifyContent: "center",
   alignItems: "center",
   top: undefined,
-  bottom: 230,
+  bottom: 210,
   height: 150,
 };
 
-const DESIRED_FONT_SIZE = 120;
+const DESIRED_FONT_SIZE = 150;
 const HIGHLIGHT_COLOR = "#A057FF";
 
 export const Page: React.FC<{
