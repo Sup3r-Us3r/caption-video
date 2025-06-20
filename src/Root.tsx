@@ -4,7 +4,7 @@ import {
   CaptionedVideo,
   calculateCaptionedVideoMetadata,
   captionedVideoSchema,
-} from "./CaptionedVideo";
+} from "./captioned-video";
 
 // Each <Composition> is an entry in the sidebar!
 

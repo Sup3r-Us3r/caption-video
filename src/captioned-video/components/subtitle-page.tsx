@@ -5,7 +5,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { Page } from "./Page";
+import { Page } from "./page";
 import { TikTokPage } from "@remotion/captions";
 
 const SubtitlePage: React.FC<{ readonly page: TikTokPage }> = ({ page }) => {

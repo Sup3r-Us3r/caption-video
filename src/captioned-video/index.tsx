@@ -14,10 +14,10 @@ import {
   staticFile,
 } from "remotion";
 import { z } from "zod";
-import SubtitlePage from "./SubtitlePage";
+import SubtitlePage from "./components/subtitle-page";
 import { getVideoMetadata } from "@remotion/media-utils";
-import { loadFont } from "../load-font";
-import { NoCaptionFile } from "./NoCaptionFile";
+import { loadFont } from "../utils/load-font";
+import { NoCaptionFile } from "./components/no-caption-file";
 import { Caption, createTikTokStyleCaptions } from "@remotion/captions";
 import { Overlay } from "./components/overlay";
 
