@@ -19,6 +19,7 @@ import { getVideoMetadata } from "@remotion/media-utils";
 import { loadFont } from "../load-font";
 import { NoCaptionFile } from "./NoCaptionFile";
 import { Caption, createTikTokStyleCaptions } from "@remotion/captions";
+import { Overlay } from "./components/overlay";
 
 export type SubtitleProp = {
   startInSeconds: number;
@@ -119,6 +120,8 @@ export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
           }}
           src={src}
         />
+
+        <Overlay />
       </AbsoluteFill>
 
       {pages.map((page, index) => {
@@ -138,6 +141,7 @@ export const CaptionedVideo: React.FC<z.infer<typeof captionedVideoSchema>> = ({
             key={index}
             from={subtitleStartFrame}
             durationInFrames={durationInFrames}
+            style={{ zIndex: 99999 }}
           >
             <SubtitlePage key={index} page={page} />;
           </Sequence>
