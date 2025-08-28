@@ -20,7 +20,7 @@ const container: React.CSSProperties = {
   height: 150,
 };
 
-const DESIRED_FONT_SIZE = 150;
+const DESIRED_FONT_SIZE = 120;
 const HIGHLIGHT_COLOR = "#A057FF";
 
 export const Page: React.FC<{
@@ -44,10 +44,13 @@ export const Page: React.FC<{
     <AbsoluteFill style={container}>
       <div
         style={{
-          fontSize,
+          fontSize: DESIRED_FONT_SIZE,
           color: "white",
           WebkitTextStroke: "20px black",
           paintOrder: "stroke",
+          textAlign: "center",
+          lineHeight: 1.2,
+          padding: DESIRED_FONT_SIZE,
           transform: makeTransform([
             scale(interpolate(enterProgress, [0, 1], [0.8, 1])),
             translateY(interpolate(enterProgress, [0, 1], [50, 0])),
@@ -76,8 +79,6 @@ export const Page: React.FC<{
               <span
                 key={t.fromMs}
                 style={{
-                  display: "inline",
-                  whiteSpace: "pre",
                   color: active ? HIGHLIGHT_COLOR : "white",
                 }}
               >
