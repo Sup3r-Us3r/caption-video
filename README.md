@@ -15,26 +15,28 @@ Welcome to your Remotion project!
 
 **Install Dependencies**
 
-```console
-npm i
+```bash
+$ npm i
 ```
 
 **Start Preview**
 
-```console
-npm run dev
+```bash
+$ npm run dev
 ```
 
 **Render video**
 
-```console
-npx remotion render
+```bash
+$ npx remotion render
+$ npx remotion render CaptionedVideo out/sample-video.mp4 --props='{"src": "/public/sample-video.mp4"}'
+$ npx remotion render CaptionedVideo out/sample-video.mp4 --props='{"src": "https://sample-video.mp4", "subtitlesUrl": "https://video-subtitles.json"}'
 ```
 
 **Upgrade Remotion**
 
-```console
-npx remotion upgrade
+```bash
+$ npx remotion upgrade
 ```
 
 ## Captioning
@@ -42,20 +44,20 @@ npx remotion upgrade
 Replace the `sample-video.mp4` with your video file.
 Caption all the videos in you `public` by running the following command:
 
-```console
-node sub.mjs
+```bash
+$ node sub.mjs
 ```
 
 Only caption a specific video:
 
-```console
-node sub.mjs <path-to-video-file>
+```bash
+$ node sub.mjs <path-to-video-file>
 ```
 
 Only caption a specific folder:
 
-```console
-node sub.mjs <path-to-folder>
+```bash
+$ node sub.mjs <path-to-folder>
 ```
 
 ## Configure Whisper.cpp
@@ -69,15 +71,3 @@ To support non-English languages, you need to change the `WHISPER_MODEL` variabl
 ## Docs
 
 Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://remotion.dev/discord).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).

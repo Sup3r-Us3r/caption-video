@@ -76,10 +76,10 @@ jobs:
             -H "Content-Type: application/json" \
             -d "{\"videoWithSubtitles\": \"$VIDEO_URL\"}")
 
-          echo "\nWebhook HTTP status: $RESPONSE\n"
+          echo -e "\nWebhook HTTP status: $RESPONSE\n"
           cat response.txt
 
           if [ "$RESPONSE" -ge 400 ]; then
-            echo "\n❌ Webhook call failed with status code $RESPONSE\n"
+            echo -e "\n❌ Webhook call failed with status code $RESPONSE\n"
             exit 1
           fi
